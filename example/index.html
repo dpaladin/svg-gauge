@@ -300,6 +300,23 @@
           dialStartAngle: 180,
           dialEndAngle: 0,
           value: 50,
+          extra: [{
+            type: 'text',
+            options: {
+              x: 50,
+              y: 30,
+              fill: "#0f0",
+              "font-size": "100%",
+              "font-family": "sans-serif",
+              "font-weight": "normal",
+              "text-anchor": "middle",
+              "alignment-baseline": "middle",
+              "dominant-baseline": "central"
+            },
+            value: function(v) {
+              return (v + 9).toFixed(2);
+            }
+          }],
           viewBox: "0 0 100 57",
           color: function(value) {
             if(value < 20) {
