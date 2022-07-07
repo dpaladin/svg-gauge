@@ -11,19 +11,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/naikus/svg-gauge.git"
+    "url": "git+https://github.com/dpaladin/svg-gauge.git"
   },
+
   "keywords": [
     "SVG",
     "Gauge",
     "Animation"
   ],
-  "author": "aniketn3@gmail.com",
+  "author": "dpaladinnyuu@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/naikus/svg-gauge/issues"
+    "url": "https://github.com/dpaladin/svg-gauge/issues"
   },
-  "homepage": "https://github.com/naikus/svg-gauge#readme",
+  "homepage": "https://github.com/dpaladin/svg-gauge#readme",
   "devDependencies": {
     "del": "~3.0.0",
     "gulp": "^4.0.2",

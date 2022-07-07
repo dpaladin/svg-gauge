@@ -87,6 +87,7 @@
       gaugeClass: "gauge",
       showValue: true,
       gaugeColor: null,
+      extra: [],
       label: function(val) {return Math.round(val);}
     };
 
@@ -179,7 +180,7 @@
      * {
      *    dialStartAngle: The angle to start the dial. MUST be greater than dialEndAngle. Default 135deg
      *    dialEndAngle: The angle to end the dial. Default 45deg
-     *    radius: The gauge's radius. Default 400
+     *    dialRadius: The gauge's radius. Default 400
      *    max: The maximum value of the gauge. Default 100
      *    value: The starting value of the gauge. Default 0
      *    label: The function on how to render the center label (Should return a value)
@@ -208,6 +209,8 @@
           gaugeValuePath,
           label = opts.label,
           viewBox = opts.viewBox,
+          extra = opts.extra,
+          extraElem = [],
           instance;
 
       if(startAngle < endAngle) {
@@ -251,6 +254,15 @@
           d: pathString(radius, startAngle, startAngle) // value of 0
         });
 
+        var children = [gaugeValueElem];
+
+        for (var i = 0; i < extra.length; i++) {
+          var ex = extra[i];
+          var el = svg(ex.type, ex.options);
+          extraElem[i] = el;
+          children.push(el);
+        }
+
         var angle = getAngle(100, 360 - Math.abs(startAngle - endAngle));
         var flag = angle <= 180 ? 0 : 1;
         var gaugeElement = svg("svg", {"viewBox": viewBox || "0 0 100 100", "class": gaugeClass}, [
@@ -261,10 +273,12 @@
             "stroke-width": 2,
             d: pathString(radius, startAngle, endAngle, flag)
           }),
-          svg("g", { "class": "text-container" }, [gaugeValueElem]),
+          svg("g", { "class": "text-container" }, children),
           gaugeValuePath
         ]);
         elem.appendChild(gaugeElement);
+
+        
       }
 
       function updateGauge(theValue, frame) {
@@ -277,6 +291,14 @@
           gaugeValueElem.textContent = label.call(opts, theValue);
         }
         gaugeValuePath.setAttribute("d", pathString(radius, startAngle, angle + startAngle, flag));
+        for (var i = 0; i < extra.length; i++) {
+          var ex = extra[i];
+          if (typeof ex.value === 'function') {
+            extraElem[i].textContent = ex.value.call(extraElem[i], theValue);
+          } else {
+            extraElem[i].textContent = theValue;
+          }
+        }
       }
 
       function setGaugeColor(value, duration) {        
@@ -302,6 +324,7 @@
       instance = {
         setMaxValue: function(max) {
           limit = max;
+          updateGauge(value);
         },
         setValue: function(val) {
           value = normalize(val, min, limit);
